@@ -30,7 +30,9 @@ bl_info = {
 	}
 
 
+import os
 import bpy
+import bpy.utils.previews
 
 # updater ops import, all setup in this file
 from . import addon_updater_ops
@@ -54,7 +56,8 @@ class rigTimyMinecraftRig(bpy.types.Panel):
 		# Internal also checks to see if auto-check enabeld
 		# and if the time interval has passed
 		addon_updater_ops.check_for_update_background(context)
-
+		row = layout.row()
+		row.label(text="Test Icon", icon_value=custom_icons["custom_icon"].icon_id)
 		if bpy.app.version[1] >= 78:
 			row = layout.row()
 			row.label(icon="ERROR", text=" In Blender 2.78+, Restart Blender between appending multiple rigs")
@@ -162,8 +165,16 @@ class TimyMinecraftRigPreferences(bpy.types.AddonPreferences):
 		# updater draw function
 		addon_updater_ops.update_settings_ui(self,context)
 
-
+custom_icons = None
+		
 def register():
+	
+	global custom_icons
+    custom_icons = bpy.utils.previews.new()
+    script_path = bpy.context.space_data.text.filepath
+    icons_dir = os.path.join(os.path.dirname(script_path), "icons")
+    custom_icons.load("custom_icon", os.path.join(icons_dir, "test_icon.png"), 'IMAGE')
+
 
 	# addon updater code and configurations
 	# in case of broken version, try to register the updater first
@@ -177,6 +188,9 @@ def register():
 
 
 def unregister():
+
+	global custom_icons
+    bpy.utils.previews.remove(custom_icons)
 
 	# addon updater unregister
 	addon_updater_ops.unregister()
