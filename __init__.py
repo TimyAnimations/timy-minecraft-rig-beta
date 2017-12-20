@@ -36,8 +36,6 @@ import bpy.utils.previews
 
 # updater ops import, all setup in this file
 from . import addon_updater_ops
-from . import icons
-
 
 class rigTimyMinecraftRig(bpy.types.Panel):
 	"""Creates a Custom Rig Mesh UI Panel"""
@@ -195,7 +193,6 @@ def unregister():
 
 	# addon updater unregister
 	addon_updater_ops.unregister()
-	icons.unregister()
 
 	# register the example panel, to show updater buttons
 	bpy.utils.unregister_class(TimyMinecraftRigPreferences)
