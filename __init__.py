@@ -36,6 +36,7 @@ import bpy.utils.previews
 
 # updater ops import, all setup in this file
 from . import addon_updater_ops
+from . import icons
 
 
 class rigTimyMinecraftRig(bpy.types.Panel):
@@ -170,16 +171,16 @@ custom_icons = None
 def register():
 	
 	global custom_icons
-    custom_icons = bpy.utils.previews.new()
-    script_path = bpy.context.space_data.text.filepath
-    icons_dir = os.path.join(os.path.dirname(script_path), "icons")
-    custom_icons.load("custom_icon", os.path.join(icons_dir, "test_icon.png"), 'IMAGE')
+	custom_icons = bpy.utils.previews.new()
+	icons_dir = os.path.join(os.path.dirname(__file__), "icons")
+	custom_icons.load("custom_icon", os.path.join(icons_dir, "test_icon.png"), 'IMAGE')
 
 
 	# addon updater code and configurations
 	# in case of broken version, try to register the updater first
 	# so that users can revert back to a working version
 	addon_updater_ops.register(bl_info)
+	icons.register()
 
 	# register the example panel, to show updater buttons
 	bpy.utils.register_class(TimyMinecraftRigPreferences)
@@ -190,7 +191,7 @@ def register():
 def unregister():
 
 	global custom_icons
-    bpy.utils.previews.remove(custom_icons)
+	bpy.utils.previews.remove(custom_icons)
 
 	# addon updater unregister
 	addon_updater_ops.unregister()
@@ -199,5 +200,3 @@ def unregister():
 	bpy.utils.unregister_class(TimyMinecraftRigPreferences)
 	bpy.utils.unregister_class(rigTimyMinecraftRig)
 	bpy.utils.unregister_class(appendTimyMinecraftRig)
-
-
