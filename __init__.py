@@ -20,7 +20,7 @@ bl_info = {
 	"name":        "Timy's Minecraft Rig Beta",
 	"description": "An advanced rig for Minecraft Characters",
 	"author":      "Timy Animations",
-	"version":     (7, 0, 2),
+	"version":     (7, 0, 1),
 	"blender":     (2, 7, 7),
 	"location":    "View 3D > Rigs",
 	"warning":     "",  # used for warning icon and text in addons panel
@@ -30,12 +30,11 @@ bl_info = {
 	}
 
 
-import os
 import bpy
-import bpy.utils.previews
 
 # updater ops import, all setup in this file
 from . import addon_updater_ops
+
 
 class rigTimyMinecraftRig(bpy.types.Panel):
 	"""Creates a Custom Rig Mesh UI Panel"""
@@ -55,8 +54,7 @@ class rigTimyMinecraftRig(bpy.types.Panel):
 		# Internal also checks to see if auto-check enabeld
 		# and if the time interval has passed
 		addon_updater_ops.check_for_update_background(context)
-		row = layout.row()
-		row.label(text="Test Icon", icon_value=custom_icons["custom_icon"].icon_id)
+
 		if bpy.app.version[1] >= 78:
 			row = layout.row()
 			row.label(icon="ERROR", text=" In Blender 2.78+, Restart Blender between appending multiple rigs")
@@ -164,21 +162,13 @@ class TimyMinecraftRigPreferences(bpy.types.AddonPreferences):
 		# updater draw function
 		addon_updater_ops.update_settings_ui(self,context)
 
-custom_icons = None
-		
-def register():
-	
-	global custom_icons
-	custom_icons = bpy.utils.previews.new()
-	icons_dir = os.path.join(os.path.dirname(__file__), "icons")
-	custom_icons.load("custom_icon", os.path.join(icons_dir, "test_icon.png"), 'IMAGE')
 
+def register():
 
 	# addon updater code and configurations
 	# in case of broken version, try to register the updater first
 	# so that users can revert back to a working version
 	addon_updater_ops.register(bl_info)
-	icons.register()
 
 	# register the example panel, to show updater buttons
 	bpy.utils.register_class(TimyMinecraftRigPreferences)
@@ -187,9 +177,6 @@ def register():
 
 
 def unregister():
-
-	global custom_icons
-	bpy.utils.previews.remove(custom_icons)
 
 	# addon updater unregister
 	addon_updater_ops.unregister()
